@@ -12,26 +12,23 @@ function error422($message){
   exit();
 }
 
-function storeCustomer($customerInput) {
+function storeChannel($channelInput) {
   global $conn;
-  $name = mysqli_real_escape_string($conn, $customerInput['name']);
-  $amount = mysqli_real_escape_string($conn, $customerInput['amount']);
+  $name = mysqli_real_escape_string($conn, $channelInput['name']);
+  $amount = mysqli_real_escape_string($conn, $channelInput['amount']);
 
   if(empty(trim($name))){
-
-    return error422('enter your name');
+    return error422('enter the channel name');
   } elseif(empty(trim($amount))) {
-
-    return error422('enter your amount');
+    return error422('enter the amount');
   } else {
-
     $query = "INSERT INTO channels (name,amount) VALUES ('$name','$amount')";
     $result = mysqli_query($conn, $query);
 
     if($result){
       $data = [
         'status' => 201,
-        'message' => 'Customer Created Successfully'
+        'message' => 'Channel Created Successfully'
       ];
       header("HTTP/1.0 201 Created");
       return json_encode($data);
@@ -46,7 +43,7 @@ function storeCustomer($customerInput) {
   }
 }
 
-function getCustomerList(){
+function getChannelList(){
   global $conn;
 
   $query = "SELECT * FROM channels";
@@ -60,7 +57,7 @@ function getCustomerList(){
 
       $data = [
         'status' => 200,
-        'message' => 'Customer List Fetched Successfully',
+        'message' => 'Channel List Fetched Successfully',
         'data' => $res,
       ];
       header("HTTP/1.0 200 OK");
@@ -68,9 +65,9 @@ function getCustomerList(){
     } else {
       $data = [
         'status' => 404,
-        'message' => 'No Customer Found'
+        'message' => 'No Channel Found'
       ];
-      header("HTTP/1.0 404 No Customer Found");
+      header("HTTP/1.0 404 Not Found");
       return json_encode($data);
     }
 
@@ -85,18 +82,17 @@ function getCustomerList(){
 
 }
 
-function getCustomer($customerParams){
+function getChannel($channelParams){
 
   global $conn;
 
-  if($customerParams['id'] == null){
-
-    return error422('enter your customer id');
+  if($channelParams['id'] == null){
+    return error422('enter the channel id');
   }
 
-  $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
+  $channelId = mysqli_real_escape_string($conn, $channelParams['id']);
 
-  $query = "SELECT * FROM channels WHERE id='$customerId' LIMIT 1" ;
+  $query = "SELECT * FROM channels WHERE id='$channelId' LIMIT 1" ;
   $result = mysqli_query($conn, $query);
 
   if($result){
@@ -106,7 +102,7 @@ function getCustomer($customerParams){
 
       $data = [
         'status' => 200,
-        'message' => 'Customer Fetched Successfully',
+        'message' => 'Channel Fetched Successfully',
         'data' => $res
       ];
       header("HTTP/1.0 200 OK");
@@ -115,7 +111,7 @@ function getCustomer($customerParams){
      else {
       $data = [
         'status' => 404,
-        'message' => 'No Customer Found'
+        'message' => 'No Channel Found'
       ];
       header("HTTP/1.0 404 Not Found");
       return json_encode($data);
@@ -129,47 +125,36 @@ function getCustomer($customerParams){
     header("HTTP/1.0 500 Internal Server Error");
     return json_encode($data);
   }
-
-
-
-
-
-
 }
 
-function updateCustomer($customerInput, $customerParams) {
+function updateChannel($channelInput, $channelParams) {
   global $conn;
 
-  if(!isset($customerParams['id'])){
-
-    return error422('customer id not found in URL');
-  } elseif  ($customerParams['id'] == null){
-
-    return error422('Enter the customer id');
+  if(!isset($channelParams['id'])){
+    return error422('channel id not found in URL');
+  } elseif  ($channelParams['id'] == null){
+    return error422('Enter the channel id');
   }
 
-  $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
+  $channelId = mysqli_real_escape_string($conn, $channelParams['id']);
 
-  $name = mysqli_real_escape_string($conn, $customerInput['name']);
-  $amount = mysqli_real_escape_string($conn, $customerInput['amount']);
+  $name = mysqli_real_escape_string($conn, $channelInput['name']);
+  $amount = mysqli_real_escape_string($conn, $channelInput['amount']);
 
   if(empty(trim($name))){
-
-
-    return error422('enter your name');
+    return error422('enter the channel name');
   } elseif(empty(trim($amount))) {
-
-    return error422('enter your amount');
+    return error422('enter the amount');
   } else {
-    $query = "UPDATE channels SET name='$name', amount='$amount' WHERE id='$customerId' LIMIT 1";
+    $query = "UPDATE channels SET name='$name', amount='$amount' WHERE id='$channelId' LIMIT 1";
     $result = mysqli_query($conn, $query);
 
     if($result){
       $data = [
         'status' => 200,
-        'message' => 'Customer Updated Successfully'
+        'message' => 'Channel Updated Successfully'
       ];
-      header("HTTP/1.0 200 Success");
+      header("HTTP/1.0 200 OK");
       return json_encode($data);
     } else {
       $data = [
@@ -182,40 +167,36 @@ function updateCustomer($customerInput, $customerParams) {
   }
 }
 
-function deleteCustomer($customerParams){
-
+function deleteChannel($channelParams) {
   global $conn;
 
-  if(!isset($customerParams['id'])){
-
-    return error422('customer id not found in URL');
-  } elseif  ($customerParams['id'] == null){
-
-    return error422('Enter the customer id');
+  if(!isset($channelParams['id'])){
+    return error422('channel id not found in URL');
+  } elseif  ($channelParams['id'] == null){
+    return error422('Enter the channel id');
   }
 
-  $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
+  $channelId = mysqli_real_escape_string($conn, $channelParams['id']);
 
-  $query = "DELETE FROM channels WHERE id='$customerId' LIMIT 1";
+  $query = "DELETE FROM channels WHERE id='$channelId' LIMIT 1";
   $result = mysqli_query($conn, $query);
 
   if($result){
     $data = [
       'status' => 200,
-      'message' => 'Customer Deleted Successfully'
+      'message' => 'Channel Deleted Successfully'
     ];
     header("HTTP/1.0 200 OK");
     return json_encode($data);
   } else {
     $data = [
-      'status' => 404,
-      'message' => 'Customer Not Found'
+      'status' => 500,
+      'message' => 'Internal Server Error'
     ];
-    header("HTTP/1.0 404 Not Found");
+    header("HTTP/1.0 500 Internal Server Error");
     return json_encode($data);
   }
 
 }
-
 
 ?>

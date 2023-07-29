@@ -1,23 +1,19 @@
-<?php
+<?php 
 error_reporting(0);
-
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: PUT');
+header('Access-Control-Allow-Methods: DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Access-Control-Allow-Headers');
 
 include('function.php');
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
-if($requestMethod == "PUT"){
+if($requestMethod == "DELETE"){
 
-  $inputData = json_decode(file_get_contents("php://input"), true);
-  $updateCustomer = updateCustomer($inputData, $_GET);
-
-  echo $updateCustomer;
-
-} else{
+    $deleteChannel = deleteChannel($_GET);
+    echo $deleteChannel;
+}else{
   $data = [
     'status' => 405,
     'message' => $requestMethod. ' Method Not Allowed'
@@ -25,6 +21,5 @@ if($requestMethod == "PUT"){
   header("HTTP/1.0 405 Method Not Allowed");
   echo json_encode($data);
 }
-
 
 ?>
