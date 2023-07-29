@@ -15,22 +15,17 @@ function error422($message){
 function storeCustomer($customerInput) {
   global $conn;
   $name = mysqli_real_escape_string($conn, $customerInput['name']);
-  $email = mysqli_real_escape_string($conn, $customerInput['email']);
-  $phone = mysqli_real_escape_string($conn, $customerInput['phone']);
+  $amount = mysqli_real_escape_string($conn, $customerInput['amount']);
 
   if(empty(trim($name))){
 
-
     return error422('enter your name');
-  } elseif(empty(trim($email))) {
+  } elseif(empty(trim($amount))) {
 
-    return error422('enter your email');
-  }elseif(empty(trim($phone))) {
+    return error422('enter your amount');
+  } else {
 
-    return error422('enter your phone');
-  }
-  else {
-    $query = "INSERT INTO customers (name,email,phone) VALUES ('$name','$email','$phone')";
+    $query = "INSERT INTO channels (name,amount) VALUES ('$name','$amount')";
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -54,7 +49,7 @@ function storeCustomer($customerInput) {
 function getCustomerList(){
   global $conn;
 
-  $query = "SELECT * FROM customers";
+  $query = "SELECT * FROM channels";
   $query_run = mysqli_query($conn, $query);
 
   if($query_run){
@@ -101,7 +96,7 @@ function getCustomer($customerParams){
 
   $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
 
-  $query = "SELECT * FROM customers WHERE id='$customerId' LIMIT 1" ;
+  $query = "SELECT * FROM channels WHERE id='$customerId' LIMIT 1" ;
   $result = mysqli_query($conn, $query);
 
   if($result){
@@ -156,22 +151,17 @@ function updateCustomer($customerInput, $customerParams) {
   $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
 
   $name = mysqli_real_escape_string($conn, $customerInput['name']);
-  $email = mysqli_real_escape_string($conn, $customerInput['email']);
-  $phone = mysqli_real_escape_string($conn, $customerInput['phone']);
+  $amount = mysqli_real_escape_string($conn, $customerInput['amount']);
 
   if(empty(trim($name))){
 
 
     return error422('enter your name');
-  } elseif(empty(trim($email))) {
+  } elseif(empty(trim($amount))) {
 
-    return error422('enter your email');
-  }elseif(empty(trim($phone))) {
-
-    return error422('enter your phone');
-  }
-  else {
-    $query = "UPDATE customers SET name='$name', email='$email', phone='$phone' WHERE id='$customerId' LIMIT 1";
+    return error422('enter your amount');
+  } else {
+    $query = "UPDATE channels SET name='$name', amount='$amount' WHERE id='$customerId' LIMIT 1";
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -206,7 +196,7 @@ function deleteCustomer($customerParams){
 
   $customerId = mysqli_real_escape_string($conn, $customerParams['id']);
 
-  $query = "DELETE FROM customers WHERE id='$customerId' LIMIT 1";
+  $query = "DELETE FROM channels WHERE id='$customerId' LIMIT 1";
   $result = mysqli_query($conn, $query);
 
   if($result){
